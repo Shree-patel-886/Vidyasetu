@@ -1,1 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vidyasetu – Bridging Schools and Students with Technology</title>
+  <meta name="description" content="Vidyasetu designs custom digital solutions for schools to improve student organization, communication, and learning." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:      #2563eb;
+      --primary-dark: #1d4ed8;
+      --sky:          #0ea5e9;
+      --slate-900:    #0f172a;
+      --slate-800:    #1e293b;
+      --slate-600:    #475569;
+      --slate-500:    #64748b;
+      --slate-400:    #94a3b8;
+      --slate-200:    #e2e8f0;
+      --slate-100:    #f1f5f9;
+      --slate-50:     #f8fafc;
+      --shadow-sm:    0 1px 3px rgba(0,0,0,.08);
+      --shadow-lg:    0 10px 30px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+      --shadow-xl:    0 20px 50px rgba(0,0,0,.15), 0 8px 16px rgba(0,0,0,.08);
+      --shadow-pri:   0 8px 24px rgba(37,99,235,.32);
+      --radius-full:  9999px;
+      --radius-lg:    20px;
+      --radius:       12px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #fff;
+      color: var(--slate-900);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 8px; font-family: inherit; font-weight: 700;
+      cursor: pointer; border: none; outline: none;
+      transition: all .2s ease; text-decoration: none; white-space: nowrap; line-height: 1;
+    }
+    .btn-blue { background: var(--primary); color: #fff; border-radius: var(--radius-full); padding: 11px 26px; font-size: 14px; box-shadow: var(--shadow-pri); }
+    .btn-blue:hover  { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 12px 30px rgba(37,99,235,.42); }
+    .btn-blue:active { transform: translateY(0); }
+    .btn-blue-lg     { padding: 18px 36px; font-size: 16px; }
+    .btn-white { background: #fff; color: var(--slate-900); border-radius: var(--radius-full); padding: 18px 40px; font-size: 17px; box-shadow: var(--shadow-lg); }
+    .btn-white:hover { background: var(--slate-100); transform: translateY(-1px); box-shadow: var(--shadow-xl); }
+
+    /* ── LOGO IMAGE HOLDER ── */
+    .logo-img {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      object-fit: contain;
+      border: 2px dashed var(--slate-200);
+      background: var(--slate-50);
+      display: block;
+    }
+    .footer-logo-img {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      object-fit: contain;
+      border: 2px dashed var(--slate-200);
+      background: var(--slate-50);
+      display: block;
+    }
+
+    /* ── HEADER ── */
+    header { position: fixed; top: 0; left: 0; right: 0; z-index: 200; padding: 20px 0; transition: all .3s; }
+    header.scrolled { background: rgba(255,255,255,.93); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--slate-200); padding: 14px 0; box-shadow: var(--shadow-sm); }
+    .nav-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+    .logo-text { font-size: 20px; font-weight: 800; letter-spacing: -.5px; color: var(--slate-900); }
+    .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+    .nav-links button { background: none; border: none; cursor: pointer; font-family: inherit; font-size: 14px; font-weight: 600; color: var(--slate-600); transition: color .2s; }
+    .nav-links button:hover { color: var(--primary); }
+    .hamburger { display: none; background: none; border: none; cursor: pointer; color: var(--slate-900); padding: 4px; }
+
+    /* ── MOBILE MENU ── */
+    .mobile-menu { display: none; position: fixed; inset: 0; z-index: 190; background: #fff; padding: 100px 28px 40px; flex-direction: column; gap: 0; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu button { background: none; border: none; border-bottom: 1px solid var(--slate-200); cursor: pointer; font-family: inherit; font-size: 20px; font-weight: 700; color: var(--slate-900); text-align: left; padding: 20px 0; transition: color .2s; }
+    .mobile-menu button:hover { color: var(--primary); }
+    .mobile-menu .btn-blue { margin-top: 24px; width: 100%; border-radius: var(--radius); padding: 16px; font-size: 16px; }
+
+    /* ── HERO ── */
+    .hero { position: relative; padding: 160px 0 110px; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: linear-gradient(160deg, #eff6ff 0%, #f0f9ff 50%, #fff 100%); z-index: -2; }
+    .hero::after  { content: ''; position: absolute; top: -20%; right: -10%; width: 60%; height: 100%; border-radius: 50%; background: radial-gradient(ellipse, rgba(186,230,255,.38) 0%, transparent 70%); z-index: -1; }
+    .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .hero-left { opacity: 0; transform: translateX(-30px); transition: opacity .8s ease, transform .8s ease; }
+    .hero-left.in { opacity: 1; transform: translateX(0); }
+    .hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: #dbeafe; color: var(--primary); border-radius: var(--radius-full); font-size: 13px; font-weight: 700; margin-bottom: 24px; }
+    .pulse-dot { position: relative; width: 8px; height: 8px; flex-shrink: 0; }
+    .pulse-dot span { position: absolute; inset: 0; border-radius: 50%; background: var(--primary); }
+    .pulse-dot span:first-child { opacity: .6; animation: pulse 1.5s ease-out infinite; }
+    @keyframes pulse { 0% { transform: scale(1); opacity: .6; } 100% { transform: scale(2.4); opacity: 0; } }
+    .hero-title { font-size: clamp(38px, 5vw, 66px); font-weight: 900; line-height: 1.08; letter-spacing: -2px; color: var(--slate-900); margin-bottom: 24px; }
+    .hl { color: var(--primary); position: relative; display: inline-block; }
+    .hl svg { position: absolute; bottom: -6px; left: 0; width: 100%; height: 10px; color: #93c5fd; }
+    .hero-desc { font-size: 18px; color: var(--slate-600); line-height: 1.7; max-width: 510px; margin-bottom: 36px; }
+
+    .hero-img-wrap { position: relative; }
+    .hero-img-box { width: 100%; aspect-ratio: 4/3; border-radius: 28px; overflow: hidden; box-shadow: var(--shadow-xl); border: 4px solid #fff; background: linear-gradient(135deg, #1d4ed8 0%, #0ea5e9 60%, #0284c7 100%); position: relative; }
+    .hero-img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hero-img-box .img-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.38) 0%, transparent 55%); }
+    .hero-img-fallback { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; padding: 32px; text-align: center; }
+    .hero-img-fallback .fi-icon { width: 80px; height: 80px; border-radius: 20px; background: rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+    .hero-img-fallback p { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
+    .hero-img-fallback span { font-size: 14px; opacity: .8; line-height: 1.6; }
+
+    .floating-pill { position: absolute; bottom: -18px; left: -22px; background: #fff; border-radius: 20px; padding: 18px 22px; box-shadow: var(--shadow-xl); border: 1px solid var(--slate-100); display: flex; align-items: center; gap: 14px; animation: floatY 4s ease-in-out infinite; }
+    @keyframes floatY { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+    .pill-icon { width: 42px; height: 42px; border-radius: 50%; background: #dcfce7; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .pill-label { font-weight: 800; font-size: 14px; color: var(--slate-900); }
+    .pill-sub   { font-size: 12px; color: var(--slate-500); margin-top: 2px; }
+
+    /* ── SECTION HELPERS ── */
+    .eyebrow { font-size: 12px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--primary); margin-bottom: 12px; }
+    .sec-title { font-size: clamp(26px, 3.5vw, 46px); font-weight: 900; letter-spacing: -1.5px; color: var(--slate-900); line-height: 1.1; margin-bottom: 18px; }
+    .sec-desc  { font-size: 17px; color: var(--slate-600); line-height: 1.7; }
+
+    /* ── HOW IT WORKS ── */
+    #how-it-works { padding: 96px 0; background: #fff; }
+    .steps-head { text-align: center; max-width: 700px; margin: 0 auto 64px; }
+    .steps-head .sec-desc { max-width: 560px; margin: 0 auto; }
+    .steps-wrap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; position: relative; }
+    .steps-line { position: absolute; top: 35px; left: 16%; right: 16%; height: 2px; background: linear-gradient(to right, transparent, #bfdbfe, transparent); }
+    .step { text-align: center; padding-top: 12px; opacity: 0; transform: translateY(28px); transition: opacity .6s ease, transform .6s ease; }
+    .step.in { opacity: 1; transform: translateY(0); }
+    .step-num { width: 70px; height: 70px; border-radius: 20px; background: var(--primary); color: #fff; font-size: 24px; font-weight: 900; display: flex; align-items: center; justify-content: center; margin: 0 auto 26px; box-shadow: var(--shadow-pri); position: relative; z-index: 1; }
+    .step h3 { font-size: 18px; font-weight: 800; color: var(--slate-900); margin-bottom: 10px; }
+    .step p  { font-size: 15px; color: var(--slate-600); line-height: 1.7; }
+
+    /* ── SERVICES ── */
+    #services { padding: 96px 0; background: var(--slate-50); }
+    .svc-header { margin-bottom: 52px; }
+    .svc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .svc-card { background: #fff; border-radius: var(--radius-lg); padding: 30px; box-shadow: var(--shadow-sm); cursor: default; opacity: 0; transform: scale(.95); transition: opacity .5s ease, transform .5s ease, box-shadow .3s; }
+    .svc-card.in { opacity: 1; transform: scale(1); }
+    .svc-card:hover { box-shadow: var(--shadow-xl); transform: translateY(-4px) scale(1.01); }
+    .svc-icon { width: 54px; height: 54px; border-radius: 14px; background: #dbeafe; display: flex; align-items: center; justify-content: center; margin-bottom: 18px; transition: background .3s; }
+    .svc-card:hover .svc-icon     { background: var(--primary); }
+    .svc-card:hover .svc-icon svg { stroke: #fff !important; }
+    .svc-card h3 { font-size: 17px; font-weight: 800; color: var(--slate-900); margin-bottom: 8px; }
+    .svc-card p  { font-size: 14px; color: var(--slate-600); line-height: 1.65; }
+    .svc-cta { border-radius: var(--radius-lg); overflow: hidden; position: relative; min-height: 210px; background: linear-gradient(135deg, var(--primary-dark) 0%, var(--sky) 100%); opacity: 0; transform: scale(.95); transition: opacity .5s ease .5s, transform .5s ease .5s; }
+    .svc-cta.in { opacity: 1; transform: scale(1); }
+    .svc-cta-ov { position: absolute; inset: 0; background: rgba(14,47,88,.52); }
+    .svc-cta-body { position: absolute; inset: 0; padding: 30px; display: flex; flex-direction: column; justify-content: flex-end; }
+    .svc-cta-body h4 { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+    .svc-cta-body p  { font-size: 15px; color: rgba(255,255,255,.8); }
+
+    /* ══════════════════════════════════════
+       ── PRICING SECTION ──
+    ══════════════════════════════════════ */
+    #pricing { padding: 96px 0; background: #fff; }
+    .pricing-head { text-align: center; max-width: 640px; margin: 0 auto 60px; }
+    .pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 860px; margin: 0 auto; }
+
+    .price-card {
+      border-radius: 24px;
+      padding: 44px 40px;
+      border: 2px solid var(--slate-200);
+      background: #fff;
+      position: relative;
+      opacity: 0; transform: translateY(24px);
+      transition: opacity .6s ease, transform .6s ease, box-shadow .3s, border-color .3s;
+    }
+    .price-card.in { opacity: 1; transform: translateY(0); }
+    .price-card:hover { box-shadow: var(--shadow-xl); border-color: #bfdbfe; }
+
+    /* Featured / highlighted card */
+    .price-card.featured {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+    .price-card.featured:hover { border-color: var(--primary-dark); }
+
+    .price-badge {
+      position: absolute;
+      top: -14px; left: 50%; transform: translateX(-50%);
+      background: #f59e0b;
+      color: #fff;
+      font-size: 11px; font-weight: 800;
+      letter-spacing: 1px; text-transform: uppercase;
+      padding: 4px 16px;
+      border-radius: var(--radius-full);
+      white-space: nowrap;
+    }
+
+    .price-plan { font-size: 13px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; color: var(--primary); }
+    .price-card.featured .price-plan { color: rgba(255,255,255,.75); }
+
+    .price-who { font-size: 24px; font-weight: 900; color: var(--slate-900); margin-bottom: 20px; }
+    .price-card.featured .price-who { color: #fff; }
+
+    .price-amount { display: flex; align-items: flex-end; gap: 4px; margin-bottom: 6px; }
+    .price-currency { font-size: 24px; font-weight: 800; color: var(--slate-600); line-height: 1.4; }
+    .price-card.featured .price-currency { color: rgba(255,255,255,.8); }
+    .price-number { font-size: 64px; font-weight: 900; line-height: 1; letter-spacing: -3px; color: var(--slate-900); }
+    .price-card.featured .price-number { color: #fff; }
+    .price-period { font-size: 15px; color: var(--slate-500); margin-bottom: 4px; align-self: flex-end; padding-bottom: 10px; }
+    .price-card.featured .price-period { color: rgba(255,255,255,.7); }
+
+    .price-sub { font-size: 14px; color: var(--slate-500); margin-bottom: 32px; }
+    .price-card.featured .price-sub { color: rgba(255,255,255,.65); }
+
+    .price-divider { border: none; border-top: 1px solid var(--slate-200); margin-bottom: 28px; }
+    .price-card.featured .price-divider { border-color: rgba(255,255,255,.2); }
+
+    .price-features { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px; }
+    .price-features li { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--slate-600); }
+    .price-card.featured .price-features li { color: rgba(255,255,255,.9); }
+    .price-features li svg { flex-shrink: 0; }
+
+    .price-btn {
+      width: 100%;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      font-family: inherit; font-weight: 700; font-size: 15px;
+      cursor: pointer; border: none; outline: none;
+      border-radius: var(--radius-full);
+      padding: 15px 24px;
+      transition: all .2s;
+    }
+    .price-btn-outline {
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+    }
+    .price-btn-outline:hover { background: var(--primary); color: #fff; }
+    .price-btn-solid {
+      background: #fff;
+      color: var(--primary);
+      box-shadow: 0 4px 16px rgba(0,0,0,.15);
+    }
+    .price-btn-solid:hover { background: var(--slate-100); }
+
+    /* ══════════════════════════════════════
+       ── REVIEWS / TESTIMONIALS (auto-scroll) ──
+    ══════════════════════════════════════ */
+    #reviews { padding: 96px 0; background: var(--slate-50); overflow: hidden; }
+    .reviews-head { text-align: center; max-width: 640px; margin: 0 auto 56px; }
+
+    .marquee-outer {
+      position: relative;
+      overflow: hidden;
+      /* fade edges */
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+    }
+    .marquee-track {
+      display: flex;
+      gap: 20px;
+      width: max-content;
+      animation: scrollLeft 38s linear infinite;
+    }
+    .marquee-track:hover { animation-play-state: paused; }
+
+    @keyframes scrollLeft {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .review-card {
+      flex-shrink: 0;
+      width: 320px;
+      background: #fff;
+      border-radius: 20px;
+      padding: 28px 28px 24px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.07);
+      border: 1px solid var(--slate-200);
+    }
+    .review-stars { display: flex; gap: 3px; margin-bottom: 14px; }
+    .review-stars svg { fill: #f59e0b; stroke: none; }
+    .review-text { font-size: 14px; color: var(--slate-600); line-height: 1.7; margin-bottom: 20px; font-style: italic; }
+    .review-author { display: flex; align-items: center; gap: 12px; }
+    .review-avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 800; color: #fff;
+      flex-shrink: 0;
+    }
+    .review-name { font-size: 14px; font-weight: 800; color: var(--slate-900); }
+    .review-role { font-size: 12px; color: var(--slate-500); margin-top: 2px; }
+    .review-tag {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      font-size: 11px; font-weight: 700;
+      background: #dbeafe; color: var(--primary);
+    }
+    .review-tag.school { background: #dcfce7; color: #15803d; }
+
+    /* ── ABOUT ── */
+    #about { padding: 96px 0; background: #fff; }
+    .about-inner { max-width: 820px; margin: 0 auto; text-align: center; opacity: 0; transform: translateY(20px); transition: opacity .7s, transform .7s; }
+    .about-inner.in { opacity: 1; transform: translateY(0); }
+    .about-quote { font-family: Georgia, serif; font-size: clamp(19px, 2.5vw, 33px); line-height: 1.55; color: var(--slate-800); margin: 28px 0 30px; }
+    .about-bar { width: 60px; height: 4px; background: var(--primary); border-radius: 2px; margin: 0 auto; }
+
+    /* ── CONTACT / FORM ── */
+    #contact { padding: 96px 0; background: var(--slate-900); position: relative; overflow: hidden; }
+    #contact::before { content: ''; position: absolute; top: -30%; right: -10%; width: 580px; height: 580px; border-radius: 50%; background: radial-gradient(ellipse, rgba(37,99,235,.35) 0%, transparent 70%); pointer-events: none; }
+    .contact-box { position: relative; z-index: 1; max-width: 750px; margin: 0 auto; text-align: center; background: rgba(255,255,255,.06); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.12); border-radius: 32px; padding: 72px 56px; box-shadow: 0 32px 80px rgba(0,0,0,.35); opacity: 0; transform: translateY(20px); transition: opacity .7s, transform .7s; }
+    .contact-box.in { opacity: 1; transform: translateY(0); }
+    .contact-box h2 { font-size: clamp(24px, 3.5vw, 44px); font-weight: 900; color: #fff; letter-spacing: -1.5px; margin-bottom: 18px; }
+    .contact-box p  { font-size: 17px; color: rgba(255,255,255,.72); line-height: 1.7; max-width: 530px; margin: 0 auto 38px; }
+    .contact-note { margin-top: 18px; font-size: 13px; color: rgba(255,255,255,.42); }
+
+    /* ── FOOTER ── */
+    footer { background: #fff; border-top: 1px solid var(--slate-200); padding: 38px 0; }
+    .footer-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 18px; }
+    .footer-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .footer-logo-text { font-size: 17px; font-weight: 800; color: var(--slate-900); }
+    .footer-right { text-align: right; }
+    .footer-email { display: block; font-size: 14px; color: var(--slate-500); text-decoration: none; margin-bottom: 5px; transition: color .2s; }
+    .footer-email:hover { color: var(--primary); }
+    .footer-copy { font-size: 13px; color: var(--slate-400); }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+
+    svg { flex-shrink: 0; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) { .svc-grid { grid-template-columns: repeat(2, 1fr); } .svc-cta { grid-column: span 2; } }
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none !important; }
+      .hamburger { display: flex; }
+      .hero { padding: 120px 0 72px; }
+      .hero-grid { grid-template-columns: 1fr; gap: 44px; }
+      .hero-img-wrap { order: -1; }
+      .floating-pill { display: none; }
+      .steps-wrap { grid-template-columns: 1fr; gap: 30px; }
+      .steps-line { display: none; }
+      .svc-grid { grid-template-columns: 1fr; }
+      .svc-cta { grid-column: span 1; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .contact-box { padding: 48px 24px; }
+      .footer-row { flex-direction: column; text-align: center; }
+      .footer-right { text-align: center; }
+    }
+    @media (min-width: 769px) {
+      .step:nth-child(2) { transition-delay: .15s; }
+      .step:nth-child(3) { transition-delay: .3s; }
+      .svc-card:nth-child(2) { transition-delay: .08s; }
+      .svc-card:nth-child(3) { transition-delay: .16s; }
+      .svc-card:nth-child(4) { transition-delay: .24s; }
+      .svc-card:nth-child(5) { transition-delay: .32s; }
+      .price-card:nth-child(2) { transition-delay: .15s; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════ HEADER ════════════════════ -->
+<header id="hdr">
+  <div class="container">
+    <div class="nav-row">
+      <a class="logo" href="#top">
+        <!-- logo.png placeholder — replace logo.png with your real logo file -->
+        <img src="logo.png" alt="Vidyasetu Logo" class="logo-img"
+             onerror="this.onerror=null; this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2236%22 height=%2236%22 viewBox=%220 0 36 36%22><rect width=%2236%22 height=%2236%22 rx=%2210%22 fill=%22%232563eb%22/><text x=%2218%22 y=%2225%22 font-family=%22Arial%22 font-size=%2218%22 font-weight=%22800%22 fill=%22white%22 text-anchor=%22middle%22>V</text></svg>';" />
+        <span class="logo-text">Vidyasetu</span>
+      </a>
+
+      <ul class="nav-links" role="list">
+        <li><button onclick="goTo('how-it-works')">How It Works</button></li>
+        <li><button onclick="goTo('services')">Services</button></li>
+        <li><button onclick="goTo('pricing')">Pricing</button></li>
+        <li><button onclick="goTo('about')">About Us</button></li>
+      </ul>
+
+      <button class="btn btn-blue nav-cta" style="display:inline-flex;" onclick="goTo('contact')">Get Started</button>
+
+      <button class="hamburger" id="hbtn" aria-label="Toggle menu" onclick="toggleNav()">
+        <svg id="ico-menu" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+        <svg id="ico-close" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile nav -->
+<div class="mobile-menu" id="mob-nav">
+  <button onclick="goTo('how-it-works')">How It Works</button>
+  <button onclick="goTo('services')">Services</button>
+  <button onclick="goTo('pricing')">Pricing</button>
+  <button onclick="goTo('about')">About Us</button>
+  <button class="btn btn-blue" onclick="goTo('contact')">Get Started</button>
+</div>
+
+<main id="top">
+
+<!-- ════════════════════ HERO ════════════════════ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-left" id="hero-copy">
+        <div class="hero-badge">
+          <span class="pulse-dot"><span></span><span></span></span>
+          Next-Gen EdTech
+        </div>
+        <h1 class="hero-title">
+          Bridging Schools and
+          <span class="hl">Students
+            <svg viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M0,9 Q100,14 200,9" stroke="currentColor" stroke-width="10" fill="none" stroke-linecap="round"/>
+            </svg>
+          </span>
+          with Technology
+        </h1>
+        <p class="hero-desc">We design custom digital solutions for schools to improve student organization, communication, and learning.</p>
+        <button class="btn btn-blue btn-blue-lg" onclick="goTo('contact')">
+          Request Your Solution
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </div>
+
+      <div class="hero-img-wrap">
+        <div class="hero-img-box">
+          <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=900&q=80&auto=format&fit=crop"
+               alt="Students learning in a classroom"
+               onerror="this.style.display='none'; document.getElementById('hero-fb').style.display='flex';" />
+          <div class="img-overlay"></div>
+          <div class="hero-img-fallback" id="hero-fb" style="display:none;">
+            <div class="fi-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
+            <p>Smart School Platform</p>
+            <span>Custom-built digital solutions for modern education</span>
+          </div>
+        </div>
+        <div class="floating-pill">
+          <div class="pill-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div>
+            <p class="pill-label">System Live</p>
+            <p class="pill-sub">100% Uptime</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ HOW IT WORKS ════════════════════ -->
+<section id="how-it-works">
+  <div class="container">
+    <div class="steps-head reveal">
+      <p class="eyebrow">The Process</p>
+      <h2 class="sec-title">How We Build Your Bridge</h2>
+      <p class="sec-desc">A streamlined approach from initial requirement to fully deployed school platform.</p>
+    </div>
+    <div class="steps-wrap">
+      <div class="steps-line" aria-hidden="true"></div>
+      <div class="step"><div class="step-num">01</div><h3>Fill out our requirement form</h3><p>Tell us about your school, your pain points, and what kind of digital presence you envision.</p></div>
+      <div class="step"><div class="step-num">02</div><h3>We analyze your school's needs</h3><p>Our team reviews your submission and designs a tailored architecture specifically for you.</p></div>
+      <div class="step"><div class="step-num">03</div><h3>We build your personalized app or website</h3><p>We deploy your custom solution, provide training, and offer ongoing support to ensure success.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ SERVICES ════════════════════ -->
+<section id="services">
+  <div class="container">
+    <div class="svc-header reveal">
+      <p class="eyebrow">Our Solutions</p>
+      <h2 class="sec-title">Tailored digital platforms for modern schools</h2>
+      <p class="sec-desc">From public-facing websites to internal management tools, we build it all from scratch to fit your exact needs.</p>
+    </div>
+    <div class="svc-grid">
+      <div class="svc-card">
+        <div class="svc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+        <h3>Custom School Websites</h3><p>Beautiful, fast, and responsive websites that represent your school's brand perfectly.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        <h3>Student Planner Systems</h3><p>Digital planners to help students organize their day and track their goals.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+        <h3>Homework &amp; Assignment Tracking</h3><p>Centralized hubs for teachers to post assignments and students to submit them.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <h3>Communication Platforms</h3><p>Secure messaging tools connecting teachers, parents, and students seamlessly.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <h3>Timetable &amp; Exam Management</h3><p>Automated scheduling and exam result portals that save administrative time.</p>
+      </div>
+      <div class="svc-cta">
+        <div class="svc-cta-ov"></div>
+        <div class="svc-cta-body"><h4>Need something else?</h4><p>We build custom solutions. Let's talk.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ PRICING ════════════════════ -->
+<section id="pricing">
+  <div class="container">
+    <div class="pricing-head reveal">
+      <p class="eyebrow">Simple Pricing</p>
+      <h2 class="sec-title">Affordable plans for everyone</h2>
+      <p class="sec-desc">No hidden fees. No complicated tiers. Just pick the plan that fits you.</p>
+    </div>
+
+    <div class="pricing-grid">
+
+      <!-- Student Plan -->
+      <div class="price-card reveal">
+        <p class="price-plan">Student Plan</p>
+        <p class="price-who">For Students</p>
+        <div class="price-amount">
+          <span class="price-currency">₹</span>
+          <span class="price-number">49</span>
+          <span class="price-period">/ month</span>
+        </div>
+        <p class="price-sub">Billed monthly &nbsp;·&nbsp; Cancel anytime</p>
+        <hr class="price-divider" />
+        <ul class="price-features">
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Personal digital planner
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Homework &amp; assignment tracker
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Timetable &amp; exam reminders
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            In-app messaging with teachers
+          </li>
+        </ul>
+        <button class="price-btn price-btn-outline" onclick="openForm()">Get Started</button>
+      </div>
+
+      <!-- School Plan -->
+      <div class="price-card featured reveal">
+        <span class="price-badge">Most Popular</span>
+        <p class="price-plan">School Plan</p>
+        <p class="price-who">For Schools</p>
+        <div class="price-amount">
+          <span class="price-currency">₹</span>
+          <span class="price-number">1399</span>
+          <span class="price-period">/ month</span>
+        </div>
+        <p class="price-sub">Billed monthly &nbsp;·&nbsp; Unlimited students</p>
+        <hr class="price-divider" />
+        <ul class="price-features">
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Custom school website
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Unlimited student accounts
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Admin dashboard &amp; analytics
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Parent–teacher communication
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Exam &amp; timetable management
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Priority support &amp; onboarding
+          </li>
+        </ul>
+        <button class="price-btn price-btn-solid" onclick="openForm()">Request for Your School</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ REVIEWS ════════════════════ -->
+<section id="reviews">
+  <div class="container">
+    <div class="reviews-head reveal">
+      <p class="eyebrow">Testimonials</p>
+      <h2 class="sec-title">Loved by students &amp; schools</h2>
+      <p class="sec-desc">Real feedback from the schools and students already using Vidyasetu.</p>
+    </div>
+  </div>
+
+  <div class="marquee-outer">
+    <div class="marquee-track" id="marquee">
+
+      <!-- ── Card set A ── -->
+      <div class="review-card">
+        <div class="review-stars">
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p class="review-text">"Vidyasetu completely changed how I keep track of my assignments. I never miss a deadline now. The planner is so easy to use!"</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:#2563eb;">A</div>
+          <div>
+            <p class="review-name">Aarav Sharma</p>
+            <p class="review-role">Class 10 Student, Delhi</p>
+            <span class="review-tag">Student</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-stars">
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p class="review-text">"Our school's communication between teachers and parents improved dramatically after switching to Vidyasetu. The team was incredibly supportive."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:#15803d;">S</div>
+          <div>
+            <p class="review-name">Sunita Verma</p>
+            <p class="review-role">Principal, Sunrise Public School, Mumbai</p>
+            <span class="review-tag school">School</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-stars">
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p class="review-text">"I used to forget exam dates all the time. The timetable reminders on Vidyasetu are a lifesaver. Highly recommend to every student!"</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:#7c3aed;">P</div>
+          <div>
+            <p class="review-name">Priya Nair</p>
+            <p class="review-role">Class 12 Student, Bengaluru</p>
+            <span class="review-tag">Student</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-stars">
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p class="review-text">"We got our school website built in under a week. It looks professional and modern. Parents are absolutely loving the new online portal."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:#d97706;">R</div>
+          <div>
+            <p class="review-name">Ramesh Gupta</p>
+            <p class="review-role">Director, Greenfield Academy, Jaipur</p>
+            <span class="review-tag school">School</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-stars">
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p class="review-text">"At just ₹49 a month, this is honestly the best investment I've made for my studies. The homework tracker alone saves me so much stress every week."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:#0891b2;">K</div>
+          <div>
+            <p class="review-name">Kavya Reddy</p>
+            <p class="review-role">Class 11 Student, Hyderabad</p>
+            <span class="review-tag">Student</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-stars">
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p class="review-text">"The Vidyasetu team understood our school's unique requirements and built exactly what we needed. Setup was fast and student adoption was immediate."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:#be185d;">M</div>
+          <div>
+            <p class="review-name">Meena Iyer</p>
+            <p class="review-role">Headmistress, St. Mary's School, Chennai</p>
+            <span class="review-tag school">School</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Card set B (duplicate for seamless loop) ── -->
+      <div class="review-card">
+        <div class="review-stars">
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p class="review-text">"Vidyasetu completely changed how I keep track of my assignments. I never miss a deadline now. The planner is so easy to use!"</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:#2563eb;">A</div>
+          <div><p class="review-name">Aarav Sharma</p><p class="review-role">Class 10 Student, Delhi</p><span class="review-tag">Student</span></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p class="review-text">"Our school's communication between teachers and parents improved dramatically after switching to Vidyasetu. The team was incredibly supportive."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:#15803d;">S</div>
+          <div><p class="review-name">Sunita Verma</p><p class="review-role">Principal, Sunrise Public School, Mumbai</p><span class="review-tag school">School</span></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p class="review-text">"I used to forget exam dates all the time. The timetable reminders on Vidyasetu are a lifesaver. Highly recommend to every student!"</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:#7c3aed;">P</div>
+          <div><p class="review-name">Priya Nair</p><p class="review-role">Class 12 Student, Bengaluru</p><span class="review-tag">Student</span></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p class="review-text">"We got our school website built in under a week. It looks professional and modern. Parents are absolutely loving the new online portal."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:#d97706;">R</div>
+          <div><p class="review-name">Ramesh Gupta</p><p class="review-role">Director, Greenfield Academy, Jaipur</p><span class="review-tag school">School</span></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p class="review-text">"At just ₹49 a month, this is honestly the best investment I've made for my studies. The homework tracker alone saves me so much stress every week."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:#0891b2;">K</div>
+          <div><p class="review-name">Kavya Reddy</p><p class="review-role">Class 11 Student, Hyderabad</p><span class="review-tag">Student</span></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p class="review-text">"The Vidyasetu team understood our school's unique requirements and built exactly what we needed. Setup was fast and student adoption was immediate."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:#be185d;">M</div>
+          <div><p class="review-name">Meena Iyer</p><p class="review-role">Headmistress, St. Mary's School, Chennai</p><span class="review-tag school">School</span></div>
+        </div>
+      </div>
+
+    </div><!-- end marquee-track -->
+  </div><!-- end marquee-outer -->
+</section>
+
+<!-- ════════════════════ ABOUT ════════════════════ -->
+<section id="about">
+  <div class="container">
+    <div class="about-inner">
+      <p class="eyebrow">About Vidyasetu</p>
+      <blockquote class="about-quote">"Vidyasetu aims to bridge the gap between schools and students by providing tailored digital platforms that simplify learning and school management."</blockquote>
+      <div class="about-bar"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ CONTACT / FORM ════════════════════ -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-box">
+      <h2>Ready to transform your school?</h2>
+      <p>Complete the form and our team will contact you with a customized solution built exactly for your needs.</p>
+      <button class="btn btn-white" onclick="openForm()">
+        Fill Requirement Form
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </button>
+      <p class="contact-note">Takes less than 5 minutes</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ════════════════════ FOOTER ════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-row">
+      <a class="footer-logo" href="#top">
+        <img src="logo.png" alt="Vidyasetu Logo" class="footer-logo-img"
+             onerror="this.onerror=null; this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2228%22 height=%2228%22 viewBox=%220 0 28 28%22><rect width=%2228%22 height=%2228%22 rx=%228%22 fill=%22%232563eb%22/><text x=%2214%22 y=%2220%22 font-family=%22Arial%22 font-size=%2214%22 font-weight=%22800%22 fill=%22white%22 text-anchor=%22middle%22>V</text></svg>';" />
+        <span class="footer-logo-text">Vidyasetu</span>
+      </a>
+      <div class="footer-right">
+        <a href="mailto:support@vidyasetu.com" class="footer-email">support@vidyasetu.com</a>
+        <p class="footer-copy">© 2026 Vidyasetu. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ── Sticky header ── */
+  var hdr = document.getElementById('hdr');
+  window.addEventListener('scroll', function () {
+    hdr.classList.toggle('scrolled', window.pageYOffset > 20);
+  }, { passive: true });
+
+  /* ── Smooth-scroll to a section ── */
+  function goTo(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var top = el.getBoundingClientRect().top + window.pageYOffset - 80;
+    window.scrollTo({ top: top, behavior: 'smooth' });
+    closeNav();
+  }
+
+  /* ── Open Google Form ── */
+  function openForm() {
+    window.open('https://forms.gle/example', '_blank');
+  }
+
+  /* ── Mobile nav ── */
+  function toggleNav() {
+    var nav  = document.getElementById('mob-nav');
+    var open = nav.classList.toggle('open');
+    document.getElementById('ico-menu').style.display  = open ? 'none' : '';
+    document.getElementById('ico-close').style.display = open ? ''     : 'none';
+  }
+  function closeNav() {
+    document.getElementById('mob-nav').classList.remove('open');
+    document.getElementById('ico-menu').style.display  = '';
+    document.getElementById('ico-close').style.display = 'none';
+  }
+
+  /* ── Hero entrance ── */
+  window.addEventListener('DOMContentLoaded', function () {
+    setTimeout(function () {
+      var c = document.getElementById('hero-copy');
+      if (c) c.classList.add('in');
+    }, 80);
+  });
+
+  /* ── Scroll-reveal ── */
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+  document.querySelectorAll(
+    '.reveal, .step, .svc-card, .svc-cta, .price-card, .about-inner, .contact-box'
+  ).forEach(function (el) { io.observe(el); });
+</script>
+
+</body>
+</html>
 
